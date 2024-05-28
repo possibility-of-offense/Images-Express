@@ -1,40 +1,32 @@
 import express from 'express';
-import { saveDoc } from '../helpers/mongoose-build';
-import { ImageModel } from '../models/ImageModel';
-import mongoose from 'mongoose';
-import renderOptions from '../helpers/renderOptions';
+import renderOptions from '../helpers/render-options';
+import { uploadImageController } from '../controllers/profile/upload-image';
+import {
+    changeProfileController,
+    changeProfileControllerView,
+} from '../controllers/profile/change-profile';
+import { redirectIfNotLoggedIn } from '../middleware/redirect-if-not-logged-in';
 
 const router = express.Router();
 
-router.get('/upload-image', (req, res) => {
+// Upload image view
+router.get('/upload-image', redirectIfNotLoggedIn('/'), (req, res) => {
     return res.render('pages/add-image', renderOptions(req));
 });
 
-// router.post('')
+// Upload Image
+router.post('/upload-image', redirectIfNotLoggedIn('/'), uploadImageController);
 
-router.post('/upload-image', async (req, res) => {
-    //
-    const image = req.file;
-    console.log(req.file);
-
-    let img;
-
-    if (!image) {
-        // TODO
-    } else {
-        const imageURL = image.path;
-
-        img = await saveDoc(
-            ImageModel.build({
-                imageURL,
-                userID: new mongoose.Types.ObjectId(req.session.userID),
-            })
-        );
-
-        console.log(imageURL);
-    }
-
-    return res.redirect('/images/' + img!._id);
-});
+// Change profile
+router.get(
+    '/change-profile',
+    redirectIfNotLoggedIn('/'),
+    changeProfileControllerView
+);
+router.post(
+    '/change-profile',
+    redirectIfNotLoggedIn('/'),
+    changeProfileController
+);
 
 export { router as ProfileRouter };

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('../partials/head.ejs') %>
+    <body>
+        <%- include('../partials/header.ejs', { userID: userID }) %>
+
+        <main class="pb-6">
+            <div class="custom-container grid grid-cols-2 md:grid-cols-3 gap-4">
+                <% if(images.length === 0) { %>
+                <h2 class="text-xl">No images yet!</h2>
+                <% } %>
+
+                <!-- Images grid -->
+                <% images.forEach((img) => { %>
+                <div class="relative shadow">
+                    <% if(isAdmin) { %>
+
+                    <form
+                        class="absolute t-0"
+                        method="POST"
+                        action="/images/delete-image"
+                    >
+                        <button
+                            class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                            type="submit"
+                        >
+                            Delete image
+                        </button>
+                        <input
+                            type="hidden"
+                            name="imageID"
+                            value="<%= img._id %>"
+                        />
+                    </form>
+                    <% } %>
+                    <a href="/images/<%= img.id %>">
+                        <img
+                            class="h-auto max-w-full rounded-lg"
+                            src="/<%= img.imageURL %>"
+                            alt=""
+                        />
+                    </a>
+                    <% if(isAdmin) { %>
+                    <a
+                        class="text-indigo-800 m-3 block underline"
+                        href="/images/<%= img.id %>#comments"
+                        >Check comments</a
+                    >
+                    <% } %>
+                </div>
+                <% }) %>
+            </div>
+
+            <div class="custom-container">
+                <nav aria-label="Page navigation example">
+                    <ul class="inline-flex -space-x-px text-base h-10">
+                        <% if(isPrevious) { %>
+                        <li>
+                            <a
+                                href="/images/by-author/<%= authorId %>?q=<%= previousSkip %>"
+                                class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                                >Previous</a
+                            >
+                        </li>
+                        <% } %>
+
+                        <!-- prettier-ignore -->
+                        <% if(isNext) { %>
+                        <li>
+                            <a
+                                href="/images/by-author/<%= authorId %>?q=<%= nextSkip %>"
+                                class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                                >Next</a
+                            >
+                        </li>
+                        <% } %>
+                    </ul>
+                </nav>
+            </div>
+        </main>
+    </body>
+</html>

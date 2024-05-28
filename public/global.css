@@ -18,3 +18,14 @@ body {
 .dropdown-menu:hover .show-dropdown-menu {
     display: block;
 }
+
+.comment-grid {
+    display: grid;
+    grid-template-columns: 1fr 50px;
+    grid-gap: 10px;
+}
+
+.comment-grid button img,
+.delete-user {
+    width: 30px;
+}

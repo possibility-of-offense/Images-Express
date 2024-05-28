@@ -16,6 +16,7 @@
                         >
                     </div>
                 </div>
+                <% if(users.length > 0) { %>
                 <div class="overflow-y-hidden rounded-lg border">
                     <div class="overflow-x-auto">
                         <table class="w-full">
@@ -25,6 +26,7 @@
                                 >
                                     <th class="px-5 py-3">Full Name</th>
                                     <th class="px-5 py-3">Created at</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody class="text-gray-500">
@@ -54,9 +56,42 @@
                                         class="border-b border-gray-200 bg-white px-5 py-5 text-sm"
                                     >
                                         <p class="whitespace-no-wrap">
-                                            <%= user.created %>
+                                            <%= user.createdAt %>
                                         </p>
                                     </td>
+                                    <% if(isAdmin) { %>
+                                    <td
+                                        class="grid justify-center items-center px-2 py-5"
+                                    >
+                                        <form
+                                            method="POST"
+                                            action="/users/delete-user"
+                                            class="grid justify-center"
+                                        >
+                                            <button
+                                                title="Delete user"
+                                                class="text-white"
+                                                type="submit"
+                                            >
+                                                <img
+                                                    class="delete-user"
+                                                    src="/bin.png"
+                                                />
+                                            </button>
+                                            <input
+                                                type="hidden"
+                                                name="userID"
+                                                value="<%= user._id %>"
+                                            />
+                                        </form>
+                                        <a
+                                            class="text-xs underline inline-block my-4"
+                                            href="/images/by-author/<%= user._id %>"
+                                        >
+                                            See images
+                                        </a>
+                                    </td>
+                                    <% } %>
                                 </tr>
                                 <% }) %>
                             </tbody>
@@ -89,6 +124,12 @@
                         </nav>
                     </div>
                 </div>
+                <% } else { %>
+                <h1>
+                    No users registered yet! <% if(isAdmin) { %>
+                    <span>Except you!</span>
+                    <% } %> <% } %>
+                </h1>
             </div>
         </main>
     </body>

@@ -1,28 +1,13 @@
 import express from 'express';
-import { CommentModel } from '../models/CommentsModel';
-import { saveDoc } from '../helpers/mongoose-build';
-import mongoose from 'mongoose';
+import { addCommentController } from '../controllers/comment/add-comment';
+import { deleteCommentController } from '../controllers/comment/delete-comment';
 
 const router = express.Router();
 
-router.post('/add-comment', async (req, res) => {
-    const userID = req.session.userID;
+// Add comment
+router.post('/add-comment', addCommentController);
 
-    if (!userID) {
-        return res.redirect('/?error=' + encodeURI('You must be login!'));
-    }
-
-    const { comment, imageID } = req.body;
-
-    await saveDoc(
-        CommentModel.build({
-            commentBody: comment,
-            userID: new mongoose.Types.ObjectId(userID),
-            imageID,
-        })
-    );
-
-    return res.redirect('/images/' + imageID);
-});
+// Delete comment
+router.post('/delete-comment', deleteCommentController);
 
 export { router as CommentRouter };

@@ -4,7 +4,7 @@
     <body>
         <%- include('../partials/header.ejs', { userID: userID }) %>
 
-        <main>
+        <main class="pb-6">
             <div class="custom-container grid grid-cols-2 md:grid-cols-3 gap-4">
                 <% if(images.length === 0) { %>
                 <h2 class="text-xl">No images yet!</h2>
@@ -12,7 +12,7 @@
 
                 <!-- Images grid -->
                 <% images.forEach((img) => { %>
-                <div class="relative">
+                <div class="relative shadow">
                     <% if(isAdmin) { %>
 
                     <form
@@ -40,6 +40,13 @@
                             alt=""
                         />
                     </a>
+                    <% if(isAdmin) { %>
+                    <a
+                        class="text-indigo-800 m-3 block underline"
+                        href="/images/<%= img.id %>#comments"
+                        >Check comments</a
+                    >
+                    <% } %>
                 </div>
                 <% }) %>
             </div>

@@ -5,6 +5,7 @@ import { IDoc, IModel, DecorateModel } from '../helpers/mongoose-build';
 interface ICommentAttrs {
     commentBody: string;
     userID: Types.ObjectId;
+    userCreatedPost: Types.ObjectId;
     imageID: string;
 }
 
@@ -27,6 +28,11 @@ const commentSchema = new mongoose.Schema(
         },
         imageID: {
             type: String,
+            required: true,
+        },
+        userCreatedPost: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
             required: true,
         },
     },

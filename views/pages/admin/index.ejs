@@ -1,83 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-    <%- include('../../partials/head.ejs') %>
-    <body>
-        <%- include('../../partials/header.ejs', { userID: userID, isAdmin: true
-        }) %>
-
-        <main class="custom-container">
-            <h2 class="text-xl mb-4">Last 5 registered users</h2>
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                <table
-                    class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+<main class="custom-container">
+    <% if(users.length > 0) { %>
+    <h2 class="text-xl mb-4">Last 5 registered users</h2>
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table
+            class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+        >
+            <thead
+                class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+            >
+                <tr>
+                    <th scope="col" class="px-6 py-3">Username</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% users.forEach((user) => { %>
+                <tr
+                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                 >
-                    <thead
-                        class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+                    <th
+                        scope="row"
+                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
-                        <tr>
-                            <th scope="col" class="px-6 py-3">Username</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% if(users.length > 0) { %> <% users.forEach((user) =>
-                        { %>
-                        <tr
-                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                        >
-                            <th
-                                scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                            >
-                                <%= user.username %>
-                            </th>
-                        </tr>
-                        <% }) %> <% } else { %>
-                        <h2>No registered users yet!</h2>
-                        <% } %>
-                    </tbody>
-                </table>
-            </div>
+                        <%= user.username %>
+                    </th>
+                </tr>
+                <% }) %> <% } else { %>
+                <h2>No registered users yet!</h2>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
 
-            <br />
-            <h2 class="text-xl mb-4">Last 5 uploaded photos</h2>
+    <br />
+    <% if(images.length > 0) { %>
+    <h2 class="text-xl mb-4">Last 5 uploaded photos</h2>
 
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                <table
-                    class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table
+            class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+        >
+            <thead
+                class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+            >
+                <tr>
+                    <th scope="col" class="px-6 py-3">Photo</th>
+                    <th scope="col" class="px-6 py-3">By username</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- prettier-ignore -->
+                <% images.forEach((image)=> { %>
+                <tr
+                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                 >
-                    <thead
-                        class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+                    <th
+                        scope="row"
+                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
-                        <tr>
-                            <th scope="col" class="px-6 py-3">Photo</th>
-                            <th scope="col" class="px-6 py-3">By username</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- prettier-ignore -->
-                        <% if(photos.length > 0) { %> <% photos.forEach((photo)=> { %>
-                        <tr
-                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                        >
-                            <th
-                                scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                            >
-                                <a href="/images/<%= photo._id %>">
-                                    <img
-                                        class="h-auto max-w-xs"
-                                        src="/<%= photo.imageURL %>"
-                                    />
-                                </a>
-                            </th>
-                            <td class="px-6 py-4">Silver</td>
-                        </tr>
-                        <% }) %> <% } else { %>
-                        <h2>No uploaded photos yet!</h2>
-                        <% } %>
-                    </tbody>
-                </table>
-            </div>
-        </main>
-    </body>
-</html>
+                        <a href="/images/<%= image._id %>">
+                            <img
+                                class="h-auto"
+                                style="max-width: 10rem"
+                                src="/<%= image.imageURL %>"
+                            />
+                        </a>
+                    </th>
+                    <td class="px-6 py-4">Silver</td>
+                </tr>
+                <% }) %> <% } else { %>
+                <h2>No uploaded photos yet!</h2>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</main>

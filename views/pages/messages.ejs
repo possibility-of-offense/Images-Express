@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('../partials/head.ejs') %>
+    <body>
+        <%- include('../partials/header.ejs', { userID: userID }) %>
+
+        <main>
+            <div class="relative overflow-x-auto">
+                <% if(messages.length > 0) { %>
+                <table
+                    class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                >
+                    <thead
+                        class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+                    >
+                        <tr>
+                            <th scope="col" class="px-6 py-3">Email</th>
+                            <th scope="col" class="px-6 py-3">Subject</th>
+                            <th scope="col" class="px-6 py-3">Message</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% messages.forEach((msg) => { %>
+                        <tr
+                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                        >
+                            <th
+                                scope="row"
+                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                            >
+                                <%= msg.email %>
+                            </th>
+                            <td class="px-6 py-4"><%= msg.subject %></td>
+                            <td class="px-6 py-4"><%= msg.message %></td>
+                        </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+                <div>
+                    <nav aria-label="Page navigation example">
+                        <ul class="inline-flex -space-x-px text-base h-10">
+                            <% if(isPrevious) { %>
+                            <li>
+                                <a
+                                    href="/contact/messages?q=<%= previousSkip %>"
+                                    class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                                    >Previous</a
+                                >
+                            </li>
+                            <% } %>
+
+                            <!-- prettier-ignore -->
+                            <% if(isNext) { %>
+                            <li>
+                                <a
+                                    href="/contact/messages?q=<%= nextSkip %>"
+                                    class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                                    >Next</a
+                                >
+                            </li>
+                            <% } %>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+                <% } else { %>
+                <h2>No received messages!</h2>
+                <% } %>
+            </div>
+        </main>
+    </body>
+</html>
+

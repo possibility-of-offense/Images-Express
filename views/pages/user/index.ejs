@@ -1,0 +1,14 @@
+<main>
+    <section class="custom-container">
+        <%- include('../../partials/home-images-links.ejs', { images: images })
+        %>
+    </section>
+    <section class="custom-container grid grid-cols-2">
+        <% if(!userID) { %>
+        <!-- Signup -->
+        <%- include('../../partials/signup.ejs', { errors: errors }) %>
+
+        <!-- Login -->
+        <%- include('../../partials/login.ejs') %> <% } %>
+    </section>
+</main>

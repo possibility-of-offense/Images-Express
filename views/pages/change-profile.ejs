@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('../partials/head.ejs') %>
+    <body>
+        <%- include('../partials/header.ejs', { userID: userID }) %>
+
+        <main>
+            <div class="custom-container w-full max-w-xs">
+                <form 
+                class="bg-white shadow-md rounded px-8 pt-2 pb-8 mb-4" 
+                method="POST" 
+                action="http://localhost:4000/profile/change-profile" 
+                enctype="multipart/form-data"
+                >
+                    <% if(profileImage !== '/user.png') { %>
+                        <img class="w-24 h-24 rounded-full shadow m-3 mb-5" width="60" src="/<%= profileImage %>" alt="User image" title="User image" />
+                    <% } %>
+                    <div class="mb-4">
+                        <label
+                            class="block text-gray-700 text-sm font-bold mb-2"
+                            for="username"
+                        >
+                            Username
+                        </label>
+                        <input
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="username"
+                            name="username"
+                            value="<%= username %>"
+                            type="text"
+                            placeholder="Username"
+                        />
+                    </div>
+                    <div class="mb-6">
+                        <label
+                            class="mb-5 block font-semibold text-[#07074D]"
+                        >
+                            Upload profile picture
+                        </label>
+
+                        <div class="mb-8">
+                           
+                            <input
+                                type="file"
+                                name="image"
+                                id="file"
+                            />
+                        </div>
+                    <div class="flex items-center justify-between">
+                        <button
+                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            type="submit"
+                        >
+                            Change profile
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </body>
+</html>

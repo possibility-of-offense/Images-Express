@@ -3,8 +3,8 @@ import { IDoc, IModel, DecorateModel } from '../helpers/mongoose-build';
 
 // Interface for properties when creating a new document
 interface IMessagesAttrs {
-    name: string;
     email: string;
+    subject: string;
     message: string;
 }
 
@@ -15,11 +15,11 @@ interface IMessagesDoc extends IDoc, IMessagesAttrs {}
 type IMessagesModel = IModel<IMessagesAttrs, IMessagesDoc> & {};
 
 const messagesSchema = new mongoose.Schema({
-    name: {
+    email: {
         type: String,
         required: true,
     },
-    email: {
+    subject: {
         type: String,
         required: true,
     },

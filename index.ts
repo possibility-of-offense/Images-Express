@@ -4,8 +4,10 @@ import mongoose from 'mongoose';
 import session from 'express-session';
 import cors from 'cors';
 import path from 'path';
-import multer from 'multer';
 
+require('dotenv').config();
+
+import { AuthMiddleware } from './middleware/auth';
 import { validationErrors } from './types/validationError';
 import { IndexRouter } from './router/index-router';
 import { ProfileRouter } from './router/profile-router';
@@ -15,17 +17,29 @@ import { ContactRouter } from './router/contact-router';
 import { AuthRouter } from './router/auth-router';
 import { CommentRouter } from './router/comment-router';
 import { SuccessRouter } from './router/success-router';
-import { AdminRouter } from './router/admin-router';
-
-// import MongoDBStore from 'connect-mongodb-session';
+import { MulterMiddleware } from './middleware/use-multer';
+import { UserModel } from './models/UserModel';
 
 // TODO add csrf
+
+// Declartion merging
+declare global {
+    namespace Express {
+        export interface Request {
+            user: string;
+            username: string;
+            admin: boolean;
+        }
+    }
+}
 
 declare module 'express-session' {
     export interface SessionData {
         userID: string;
+        username: string;
         validationErrors: validationErrors;
         isAdmin: boolean;
+        sendedEmail: boolean;
     }
 }
 
@@ -41,26 +55,14 @@ app.use(
         extended: false,
     })
 );
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, './images/');
-    },
-    filename: function (req: any, file: any, cb: any) {
-        cb(null, file.originalname);
-    },
-});
-const fileFilter = (req: any, file: any, cb: any) => {
-    if (
-        file.mimetype === 'image/jpg' ||
-        file.mimetype === 'image/jpeg' ||
-        file.mimetype === 'image/png'
-    ) {
-        cb(null, true);
-    } else {
-        cb(new Error('Image uploaded is not of type jpg/jpeg or png'), false);
-    }
-};
-app.use(multer({ storage, fileFilter }).single('image'));
+
+// Use multer
+const useMulter = new MulterMiddleware([
+    'image/jpg',
+    'image/jpeg',
+    'image/png',
+]);
+useMulter.use(app);
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -70,10 +72,13 @@ app.use(
         secret: 'my secret',
         resave: false,
         saveUninitialized: false,
-        // store: store,
     })
 );
 
+// Auth middleware
+AuthMiddleware.checkAuthentication(app);
+
+// Middlewares for static folders
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
@@ -86,11 +91,23 @@ app.use('/comments', CommentRouter);
 app.use('/users', UsersRouter);
 app.use('/contact', ContactRouter);
 app.use('/success', SuccessRouter);
-// app.use('/admin', AdminRouter);
 
 const init = async () => {
     try {
         await mongoose.connect('mongodb://127.0.0.1:27017/images');
+
+        const checkForAdmin = await UserModel.findOne({
+            username: process.env.ADMIN_USERNAME!,
+        });
+
+        if (!checkForAdmin) {
+            const admin = new UserModel({
+                username: process.env.ADMIN_USERNAME!,
+                password: process.env.ADMIN_PASSWORD!,
+                isAdmin: true,
+            });
+            await admin.save();
+        }
 
         app.listen(4000, () => {
             console.log('Server running!');

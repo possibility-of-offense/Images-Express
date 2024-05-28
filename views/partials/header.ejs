@@ -20,8 +20,8 @@
                     <li>
                         <a
                             href="/"
-                            class="text-blue-600 font-bold underline block py-2 pr-4 pl-3 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
-                            aria-current="da"
+                            class="<%= activeLink === '/' ? 'text-blue-600 font-bold underline' : 'text-gray-700' %> block py-2 pr-4 pl-3 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                            aria-current="Home"
                         >
                             Home
                         </a>
@@ -29,8 +29,8 @@
                     <li>
                         <a
                             href="/images"
-                            class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
-                            aria-current="da"
+                            class="<%= activeLink === 'images' ? 'text-blue-600 font-bold underline' : 'text-gray-700' %> block py-2 pr-4 pl-3 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                            aria-current="Images"
                         >
                             Images
                         </a>
@@ -38,8 +38,8 @@
                     <li>
                         <a
                             href="/users"
-                            class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
-                            aria-current="da"
+                            class="<%= activeLink === 'users' ? 'text-blue-600 font-bold underline' : 'text-gray-700' %> block py-2 pr-4 pl-3 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                            aria-current="Users"
                         >
                             Users
                         </a>
@@ -48,13 +48,26 @@
                     <li>
                         <a
                             href="/contact"
-                            class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
-                            aria-current="da"
+                            class="<%= activeLink === 'contact' ? 'text-blue-600 font-bold underline' : 'text-gray-700' %> block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                            aria-current="Contact"
                         >
                             Contacts
                         </a>
                     </li>
-                    <% } %> <% if(userID) { %>
+                    <% } else { %>
+                    <li>
+                        <a
+                            href="/contact/messages"
+                            class="<%= activeLink === 'contact/messages' ? 'text-blue-600 font-bold underline' : 'text-gray-700' %> block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                            aria-current="Contact"
+                        >
+                            Messages
+                        </a>
+                    </li>
+                    <% } %>
+
+                    <!-- prettier-ignore -->
+                    <% if(userID) { %>
                     <li>
                         <div class="relative inline-block text-left">
                             <div class="relative dropdown-menu">
@@ -65,7 +78,7 @@
                                     aria-expanded="true"
                                     aria-haspopup="true"
                                 >
-                                    Profile
+                                    Profile <%= username %>
                                     <svg
                                         class="-mr-1 h-5 w-5 text-gray-400"
                                         viewBox="0 0 20 20"
@@ -92,15 +105,15 @@
                                     >
                                         <a
                                             href="/profile/upload-image"
-                                            class="text-gray px-3 block py-2 text-gray-700 border-b border-gray-100 rounded"
-                                            aria-current="da"
+                                            class="<%= activeLink === 'profile/upload-image' ? 'text-blue-600 font-bold underline' : 'text-gray text-gray-700' %> px-3 block py-2 border-b border-gray-100 rounded"
+                                            aria-current="Upload image"
                                         >
                                             Upload image
                                         </a>
                                         <a
                                             href="/profile/change-profile"
-                                            class="text-gray px-3 block py-2 text-gray-700 border-b border-gray-100 rounded"
-                                            aria-current="da"
+                                            class="<%= activeLink === 'profile/change-profile' ? 'text-blue-600 font-bold underline' : 'text-gray text-gray-700' %> px-3 block py-2 border-b border-gray-100 rounded"
+                                            aria-current="Change profile"
                                         >
                                             Change profile
                                         </a>
@@ -113,7 +126,7 @@
                         <a
                             href="/auth/signout"
                             class="bg-blue-600 text-white px-3 block py-2 text-gray-700 border-b border-gray-100 rounded"
-                            aria-current="da"
+                            aria-current="Log out"
                         >
                             Log Out
                         </a>

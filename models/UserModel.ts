@@ -7,6 +7,7 @@ interface IUserAttrs {
     username: string;
     password: string;
     isAdmin: boolean;
+    profileImage?: string;
 }
 
 // Interface for properties in User document

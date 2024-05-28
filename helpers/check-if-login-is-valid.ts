@@ -8,7 +8,7 @@ export interface UserPayload {
 
 export async function checkIfLoginIsValid(
     model: typeof Model,
-    email: string,
+    username: string,
     password: string,
     comparator: (
         suppliedPassword: string,
@@ -20,7 +20,7 @@ export async function checkIfLoginIsValid(
         [Property in keyof UserPayload]?: UserPayload[Property];
     };
 }> {
-    const user = await model.findOne({ email });
+    const user = await model.findOne({ username });
 
     if (user) {
         return await Promise.resolve({
@@ -28,7 +28,6 @@ export async function checkIfLoginIsValid(
             additionalInfo: {
                 id: user._id,
                 username: user.username,
-                email: user.email,
             },
         });
     }
