@@ -5,6 +5,7 @@ import session from 'express-session';
 import cors from 'cors';
 import path from 'path';
 import cookieParser from 'cookie-parser';
+import flash from 'connect-flash';
 
 require('dotenv').config();
 
@@ -23,6 +24,7 @@ import { UserModel } from './models/UserModel';
 import renderOptions from './helpers/render-options';
 import { csrfProtection } from './middleware/csrf';
 import { ForgotPasswordRequestRouter } from './router/forgot-password-request-router';
+import { InsertData } from './helpers/insert-data';
 
 // TODO add csrf
 
@@ -69,6 +71,7 @@ const useMulter = new MulterMiddleware([
 ]);
 useMulter.use(app);
 app.use(csrfProtection);
+app.use(flash());
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -82,22 +85,7 @@ app.use(
 );
 
 // Auth middleware
-// AuthMiddleware.checkAuthentication(app);
-app.use((req: Request, res: Response, next: NextFunction) => {
-    if (req.session.userID) {
-        req.username = req.session.username!;
-        req.user = req.session.userID;
-    }
-    if (req.session.isAdmin) {
-        req.admin = Boolean(req.session.isAdmin);
-    } else {
-        req.admin = false;
-    }
-
-    res.locals.csrfToken = req.csrfToken();
-
-    next();
-});
+AuthMiddleware.checkAuthentication(app);
 
 // Middlewares for static folders
 app.use(express.static(path.join(__dirname, 'public')));
@@ -128,19 +116,37 @@ app.use('*', (err: Error, req: Request, res: Response, next: NextFunction) => {
 
 const init = async () => {
     try {
-        await mongoose.connect('mongodb://127.0.0.1:27017/images');
+        await mongoose.connect(process.env.MONGO_URI!);
+        // await mongoose.connect('mongodb://127.0.0.1:27017/images');
 
-        const checkForAdmin = await UserModel.findOne({
-            username: process.env.ADMIN_USERNAME!,
+        // Insert admins
+        let admins: string | string[] =
+            process.env.ADMINS_USERNAME!.split('----');
+
+        const checkForAdmins = await UserModel.find({
+            username: {
+                $in: admins,
+            },
         });
 
-        if (!checkForAdmin) {
-            const admin = new UserModel({
-                username: process.env.ADMIN_USERNAME!,
-                password: process.env.ADMIN_PASSWORD!,
-                isAdmin: true,
-            });
-            await admin.save();
+        if (checkForAdmins.length === 0) {
+            const adminPasswords: string | string[] =
+                process.env.ADMINS_PASSWORD!.split('----');
+
+            for (let i = 0; i < admins.length; i++) {
+                const admin = new UserModel({
+                    username: admins[i],
+                    password: adminPasswords[i],
+                    isAdmin: true,
+                });
+                await admin.save();
+            }
+        }
+
+        // Bulk Insert if the issued command is: npm start bulk
+        if (process.argv.slice().pop() === 'bulk') {
+            const insertData = new InsertData(20);
+            insertData.bulkInsert();
         }
 
         app.listen(4000, () => {

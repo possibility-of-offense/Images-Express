@@ -37,5 +37,7 @@ export const forgotPasswordController = async (req: Request, res: Response) => {
         })
     );
 
+    req.flash('info', 'Your request was send to the admin!');
+
     return res.redirect('/');
 };

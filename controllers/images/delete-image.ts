@@ -4,7 +4,7 @@ import { CommentModel } from '../../models/CommentsModel';
 
 export const deleteImageController = async (req: Request, res: Response) => {
     const { imageID } = req.body;
-    const userID = req.session.userID;
+    const userID = req.user;
     const isAdmin = req.admin;
 
     const getImage = await ImageModel.findOne({ _id: imageID });
@@ -16,7 +16,7 @@ export const deleteImageController = async (req: Request, res: Response) => {
         await ImageModel.findByIdAndDelete({ _id: imageID });
 
         await CommentModel.deleteMany({
-            userID,
+            imageID,
         });
     }
 

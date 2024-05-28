@@ -22,14 +22,17 @@ export const signinController = async (req: Request, res: Response) => {
 
     let user = {};
     if (additionalInfo && Object.keys(additionalInfo).length > 0) {
+        const adminsUsernames = process.env.ADMINS_USERNAME!.split('----');
+        const adminsPasswords = process.env.ADMINS_PASSWORD!.split('----');
+
         user = additionalInfo;
 
         req.session.userID = additionalInfo.id;
         req.session.username = additionalInfo.username;
 
         if (
-            username === process.env.ADMIN_USERNAME! &&
-            password === process.env.ADMIN_PASSWORD!
+            adminsUsernames.includes(username) &&
+            adminsPasswords.includes(password)
         ) {
             req.session.isAdmin = true;
         }

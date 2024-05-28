@@ -13,11 +13,17 @@ export const getImageController = async (req: Request, res: Response) => {
         return res.redirect('/');
     }
 
+    let enableAdminToDeleteHisComments: boolean = false;
+
+    if (process.env.ENABLE_ADMIN_DELETE_HIS_COMMENTS! === 'true') {
+        enableAdminToDeleteHisComments = true;
+    }
+
     const findComments = await CommentModel.find({
         imageID: req.params.imageID,
     })
         .limit(+process.env.COMMENTS_QUERY!)
-        .populate('userID', 'username')
+        .populate('userID', 'username profileImage')
         .lean();
 
     const comments = findComments.map((el) => {
@@ -40,6 +46,7 @@ export const getImageController = async (req: Request, res: Response) => {
             userCreatedPost: findImage?.userID._id.toHexString(),
             isLoggedIn: req.user ? true : false,
             comments,
+            enableAdminToDeleteHisComments,
         })
     );
 };

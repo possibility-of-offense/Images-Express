@@ -26,7 +26,7 @@ export const indexController = async (req: Request, res: Response) => {
 
     // If it is admin on the home page
     if (req.admin) {
-        users = await UserModel.find()
+        users = await UserModel.find({ isAdmin: false })
             .limit(+process.env.HOME_PAGE_ADMIN_LIMIT_RESULTS!)
             .sort({ createdAt: 'desc' })
             .lean();
@@ -47,6 +47,7 @@ export const indexController = async (req: Request, res: Response) => {
             errors: Array.isArray(errors) ? errors : [],
             images,
             users,
+            flashMessage: req.flash('info'),
         })
     );
 };

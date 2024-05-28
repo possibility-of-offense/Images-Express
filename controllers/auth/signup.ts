@@ -29,13 +29,16 @@ export const signupController = async (req: Request, res: Response) => {
         res.redirect('/?error=' + encodeURI('The user is already registered!'));
         return;
     } else {
+        const adminsUsernames = process.env.ADMINS_USERNAME!.split('----');
+        const adminsPasswords = process.env.ADMINS_PASSWORD!.split('----');
+
         user = await saveDoc(
             UserModel.build({
                 username,
                 password,
                 isAdmin:
-                    username === process.env.ADMIN_USERNAME! &&
-                    password === process.env.ADMIN_PASSWORD!,
+                    adminsUsernames.includes(username) &&
+                    adminsPasswords.includes(password),
             })
         );
     }

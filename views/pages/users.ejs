@@ -102,9 +102,13 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <% if(isPrevious || isNext) { %>
                     <div class="custom-container">
                         <nav aria-label="Page navigation example">
-                            <ul class="inline-flex -space-x-px text-base h-10">
+                            <ul
+                                class="flex justify-between -space-x-px text-base h-10"
+                            >
                                 <% if(isPrevious) { %>
                                 <li>
                                     <a
@@ -129,7 +133,7 @@
                         </nav>
                     </div>
                 </div>
-                <% } else { %>
+                <% } %> <% } else { %>
                 <h1>
                     No users registered yet! <% if(isAdmin) { %>
                     <span>Except you!</span>

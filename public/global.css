@@ -19,10 +19,9 @@ body {
     display: block;
 }
 
-.comment-grid {
-    display: grid;
-    grid-template-columns: 1fr 50px;
-    grid-gap: 10px;
+.comment-grid > p {
+    margin-top: 10px;
+    font-weight: bold;
 }
 
 .comment-grid button img,

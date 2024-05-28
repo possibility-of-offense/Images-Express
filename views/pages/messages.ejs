@@ -36,9 +36,10 @@
                         <% }) %>
                     </tbody>
                 </table>
+                <% if(isPrevious || isNext) { %>
                 <div>
                     <nav aria-label="Page navigation example">
-                        <ul class="inline-flex -space-x-px text-base h-10">
+                        <ul class="flex justify-between -space-x-px text-base h-10">
                             <% if(isPrevious) { %>
                             <li>
                                 <a
@@ -62,9 +63,12 @@
                         </ul>
                     </nav>
                 </div>
+                <% } %>
             </div>
                 <% } else { %>
-                <h2>No received messages!</h2>
+                    <div class="custom-container">
+                        <h2>No received messages!</h2>
+                    </div>
                 <% } %>
             </div>
         </main>

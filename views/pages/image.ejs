@@ -92,7 +92,7 @@
 
                 <% comments.forEach((comment) => { %>
                 <article
-                    class="comment-grid p-6 mb-3 text-base bg-white border-t border-gray-200 dark:border-gray-700 dark:bg-gray-900"
+                    class="relative comment-grid p-6 mb-3 text-base bg-white border-t border-gray-200 dark:border-gray-700 dark:bg-gray-900"
                     id="comments"
                 >
                     <footer class="flex justify-between items-center mb-2">
@@ -102,7 +102,7 @@
                             >
                                 <img
                                     class="mr-2 w-6 h-6 rounded-full"
-                                    src="https://flowbite.com/docs/images/people/profile-picture-3.jpg"
+                                    src="<%= comment.userID.profileImage %>"
                                     alt="Bonnie Green"
                                 /><%= comment.userID.username %>
                             </p>
@@ -117,7 +117,11 @@
                         </div>
                     </footer>
                     <% if(isAdmin) { %>
-                    <form method="POST" action="/comments/delete-comment">
+                    <form
+                        class="absolute top-1 right-1"
+                        method="POST"
+                        action="/comments/delete-comment"
+                    >
                         <button
                             title="Delete comment"
                             class="text-white"
