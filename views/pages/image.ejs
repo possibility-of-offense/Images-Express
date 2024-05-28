@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('../partials/head.ejs') %>
+    <body>
+        <%- include('../partials/header.ejs', { userID: userID }) %>
+
+        <main class="custom-container">
+            <div class="grid gap-4">
+                <% if(isOwnImage) { %>
+                <div>
+                    <form
+                        action="http://localhost:4000/images/delete-image"
+                        method="POST"
+                    >
+                        <input
+                            type="hidden"
+                            name="imageID"
+                            value="<%= image._id %>"
+                        />
+                        <button
+                            type="submit"
+                            class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                        >
+                            Delete image
+                        </button>
+                    </form>
+                    <% } %>
+                    <img
+                        class="h-auto max-w-full rounded-lg"
+                        src="/<%= image.imageURL %>"
+                        alt=""
+                    />
+                </div>
+                <% if(isLoggedIn) { %>
+                <div class="bg-white p-3 shadow">
+                    <form
+                        class="mb-6"
+                        method="POST"
+                        action="http://localhost:4000/comments/add-comment"
+                    >
+                        <div
+                            class="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700"
+                        >
+                            <label for="comment" class="sr-only"
+                                >Your comment</label
+                            >
+                            <textarea
+                                name="comment"
+                                id="comment"
+                                rows="6"
+                                class="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
+                                placeholder="Write a comment..."
+                                required
+                            ></textarea>
+                            <input
+                                type="hidden"
+                                name="imageID"
+                                value="<%= image._id.toHexString() %>"
+                            />
+                        </div>
+                        <button
+                            type="submit"
+                            class="bg-indigo-600 inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+                        >
+                            Post comment
+                        </button>
+                    </form>
+                </div>
+                <% } %>
+            </div>
+            <div class="">
+                <% if(comments.length > 0) { %>
+                <h3 class="text-xl my-4">Comments</h3>
+
+                <% comments.forEach((comment) => { %>
+                <article
+                    class="p-6 mb-3 text-base bg-white border-t border-gray-200 dark:border-gray-700 dark:bg-gray-900"
+                >
+                    <footer class="flex justify-between items-center mb-2">
+                        <div class="flex items-center">
+                            <p
+                                class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white font-semibold"
+                            >
+                                <img
+                                    class="mr-2 w-6 h-6 rounded-full"
+                                    src="https://flowbite.com/docs/images/people/profile-picture-3.jpg"
+                                    alt="Bonnie Green"
+                                /><%= comment.userID.username %>
+                            </p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                <time
+                                    pubdate=""
+                                    datetime="2022-03-12"
+                                    title="March 12th, 2022"
+                                    ><%= comment.createdAt %></time
+                                >
+                            </p>
+                        </div>
+                    </footer>
+                    <% if(isAdmin) { %>
+                    <form
+                        class="absolute t-0"
+                        method="POST"
+                        action="/images/delete-image"
+                    >
+                        <button
+                            class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                            type="submit"
+                        >
+                            <img
+                                width="50"
+                                class="h-auto max-w-xs"
+                                src="/bin.png"
+                            />
+                        </button>
+                    </form>
+                    <% } %>
+                    <p class="text-gray-500 dark:text-gray-400">
+                        <%= comment.commentBody %>
+                    </p>
+                </article>
+                <% }) %> <% } %>
+            </div>
+        </main>
+    </body>
+</html>

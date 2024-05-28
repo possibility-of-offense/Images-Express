@@ -1,0 +1,20 @@
+body {
+    background-color: #f4f4f4;
+}
+
+.custom-container {
+    max-width: 900px;
+    margin: 2rem auto 0 auto;
+}
+
+.home-page__form {
+    height: 500px;
+}
+
+.show-dropdown-menu {
+    display: none;
+}
+
+.dropdown-menu:hover .show-dropdown-menu {
+    display: block;
+}

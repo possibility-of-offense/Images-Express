@@ -1,0 +1,18 @@
+<% if(images.length > 0) { %>
+<h3 class="text-xl font-bold mb-4">Last 10 images</h3>
+<% } %>
+
+<div class="container grid grid-cols-3">
+    <!-- prettier-ignore -->
+    <% images.forEach((img) => { %>
+    <div class="max-w-xs flex flex-col">
+        <a
+            href="/images/<%= img._id.toHexString() %>"
+            class="inline-flex items-center gap-x-2 py-3 px-4 text-sm text-start font-medium border border-gray-200 text-blue-600 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg focus:z-10 disabled:opacity-50 disabled:pointer-events-none dark:border-neutral-700"
+        >
+            <%= img._id %>
+        </a>
+    </div>
+
+    <% }); %>
+</div>
