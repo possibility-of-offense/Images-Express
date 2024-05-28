@@ -9,6 +9,7 @@ export const getImagesController = async (req: Request, res: Response) => {
     const images = await ImageModel.find()
         .skip(+skip)
         .limit(+process.env.IMAGES_QUERY!)
+        .sort({ createdAt: 'desc' })
         .lean();
 
     const pagination = new Paginator(

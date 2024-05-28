@@ -41,7 +41,6 @@ const commentSchema = new mongoose.Schema(
     }
 );
 
-// https://stackoverflow.com/questions/53113031/how-to-see-a-fully-expanded-typescript-type-without-n-more-and
 const CommentModel = new DecorateModel<
     ICommentAttrs,
     typeof commentSchema,

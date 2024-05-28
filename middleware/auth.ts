@@ -18,6 +18,8 @@ export class AuthMiddleware {
                 req.admin = false;
             }
 
+            res.locals.csrfToken = req.csrfToken();
+
             next();
         });
     }

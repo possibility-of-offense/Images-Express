@@ -51,7 +51,6 @@ userSchema.pre('save', async function () {
     }
 });
 
-// https://stackoverflow.com/questions/53113031/how-to-see-a-fully-expanded-typescript-type-without-n-more-and
 const UserModel = new DecorateModel<
     IUserAttrs,
     typeof userSchema,

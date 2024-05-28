@@ -1,9 +1,10 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import { urlencoded } from 'body-parser';
 import mongoose from 'mongoose';
 import session from 'express-session';
 import cors from 'cors';
 import path from 'path';
+import cookieParser from 'cookie-parser';
 
 require('dotenv').config();
 
@@ -19,6 +20,9 @@ import { CommentRouter } from './router/comment-router';
 import { SuccessRouter } from './router/success-router';
 import { MulterMiddleware } from './middleware/use-multer';
 import { UserModel } from './models/UserModel';
+import renderOptions from './helpers/render-options';
+import { csrfProtection } from './middleware/csrf';
+import { ForgotPasswordRequestRouter } from './router/forgot-password-request-router';
 
 // TODO add csrf
 
@@ -55,6 +59,7 @@ app.use(
         extended: false,
     })
 );
+app.use(cookieParser());
 
 // Use multer
 const useMulter = new MulterMiddleware([
@@ -63,6 +68,7 @@ const useMulter = new MulterMiddleware([
     'image/png',
 ]);
 useMulter.use(app);
+app.use(csrfProtection);
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -76,7 +82,22 @@ app.use(
 );
 
 // Auth middleware
-AuthMiddleware.checkAuthentication(app);
+// AuthMiddleware.checkAuthentication(app);
+app.use((req: Request, res: Response, next: NextFunction) => {
+    if (req.session.userID) {
+        req.username = req.session.username!;
+        req.user = req.session.userID;
+    }
+    if (req.session.isAdmin) {
+        req.admin = Boolean(req.session.isAdmin);
+    } else {
+        req.admin = false;
+    }
+
+    res.locals.csrfToken = req.csrfToken();
+
+    next();
+});
 
 // Middlewares for static folders
 app.use(express.static(path.join(__dirname, 'public')));
@@ -91,6 +112,19 @@ app.use('/comments', CommentRouter);
 app.use('/users', UsersRouter);
 app.use('/contact', ContactRouter);
 app.use('/success', SuccessRouter);
+app.use('/password-requests', ForgotPasswordRequestRouter);
+
+// Error handling
+app.use('*', (err: Error, req: Request, res: Response, next: NextFunction) => {
+    console.log(err.message);
+
+    return res.render(
+        'pages/404',
+        renderOptions(req, {
+            msg: err.message || 'Error!',
+        })
+    );
+});
 
 const init = async () => {
     try {

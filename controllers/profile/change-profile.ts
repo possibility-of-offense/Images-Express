@@ -8,8 +8,6 @@ export const changeProfileControllerView = async (
 ) => {
     const userInfo = await UserModel.findById(req.user);
 
-    console.log(userInfo);
-
     return res.render(
         'pages/change-profile',
         renderOptions(req, {

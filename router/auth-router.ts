@@ -3,6 +3,10 @@ import { body } from 'express-validator';
 import { signupController } from '../controllers/auth/signup';
 import { notEqualPasswords } from '../middleware/not-equal-passwords';
 import { signinController } from '../controllers/auth/signin';
+import {
+    forgotPasswordControllerView,
+    forgotPasswordController,
+} from '../controllers/auth/forgot-password';
 
 const router = express.Router();
 
@@ -31,6 +35,10 @@ router.post(
 
 // Signin
 router.post('/signin', signinController);
+
+// Forgot password
+router.get('/forgot-password', forgotPasswordControllerView);
+router.post('/forgot-password', notEqualPasswords, forgotPasswordController);
 
 // Signout
 router.get('/signout', (req: Request, res: Response) => {

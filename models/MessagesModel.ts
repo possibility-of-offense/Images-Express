@@ -29,7 +29,6 @@ const messagesSchema = new mongoose.Schema({
     },
 });
 
-// https://stackoverflow.com/questions/53113031/how-to-see-a-fully-expanded-typescript-type-without-n-more-and
 const MessagesModel = new DecorateModel<
     IMessagesAttrs,
     typeof messagesSchema,

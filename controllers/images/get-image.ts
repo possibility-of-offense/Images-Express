@@ -4,7 +4,14 @@ import renderOptions from '../../helpers/render-options';
 import { CommentModel } from '../../models/CommentsModel';
 
 export const getImageController = async (req: Request, res: Response) => {
-    const findImage = await ImageModel.findById(req.params.imageID);
+    const findImage = await ImageModel.findById(req.params.imageID).populate(
+        'userID',
+        'username'
+    );
+
+    if (!findImage) {
+        return res.redirect('/');
+    }
 
     const findComments = await CommentModel.find({
         imageID: req.params.imageID,
@@ -29,8 +36,8 @@ export const getImageController = async (req: Request, res: Response) => {
         'pages/image',
         renderOptions(req, {
             image: findImage,
-            isOwnImage: findImage?.userID.toHexString() === req.user,
-            userCreatedPost: findImage?.userID.toHexString(),
+            isOwnImage: findImage?.userID._id.toHexString() === req.user,
+            userCreatedPost: findImage?.userID._id.toHexString(),
             isLoggedIn: req.user ? true : false,
             comments,
         })

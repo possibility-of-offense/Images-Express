@@ -68,6 +68,11 @@
                                             action="/users/delete-user"
                                             class="grid justify-center"
                                         >
+                                            <input
+                                                type="hidden"
+                                                name="_csrf"
+                                                value="<%= csrfToken %>"
+                                            />
                                             <button
                                                 title="Delete user"
                                                 class="text-white"
