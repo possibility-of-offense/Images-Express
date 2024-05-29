@@ -51,11 +51,11 @@ declare module 'express-session' {
 
 const app = express();
 
-app.use(
-    cors({
-        origin: 'http://localhost:4000',
-    })
-);
+// app.use(
+//     cors({
+//         origin: 'http://localhost:4000',
+//     })
+// );
 app.use(
     urlencoded({
         extended: false,
